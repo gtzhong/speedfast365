@@ -9,6 +9,7 @@ config.php
 *.exe
 *.o
 *.so
+*.swp
 
 # Packages #
 ############
