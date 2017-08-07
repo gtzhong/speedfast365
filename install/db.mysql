@@ -1,0 +1,496 @@
+-- phpMyAdmin SQL Dump
+-- version 4.4.15.6
+-- http://www.phpmyadmin.net
+--
+-- Host: localhost
+-- 服务器版本： 5.5.56-log
+-- PHP Version: 5.5.38
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `alipay_history`
+--
+
+CREATE TABLE IF NOT EXISTS `alipay_history` (
+  `id` int(11) NOT NULL,
+  `status` int(11) NOT NULL DEFAULT '0' COMMENT '1:交易成功',
+  `trade_no` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `check_code` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `amount` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `dateline` int(11) NOT NULL DEFAULT '0',
+  `username` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `recharge_id` bigint(20) NOT NULL DEFAULT '0',
+  `recharge_time` int(11) NOT NULL DEFAULT '0',
+  `recharge_expire` int(11) NOT NULL DEFAULT '0',
+  `recharge_bytes` bigint(20) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `member`
+--
+
+CREATE TABLE IF NOT EXISTS `member` (
+  `id` int(11) NOT NULL,
+  `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `pwd` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `salt` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `reg_from` int(255) NOT NULL DEFAULT '0' COMMENT '2:adwords',
+  `register_time` int(11) NOT NULL DEFAULT '0',
+  `register_ip` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `ss_user_id` int(11) NOT NULL DEFAULT '0',
+  `disable` int(11) NOT NULL DEFAULT '0',
+  `invite_code` int(11) NOT NULL,
+  `inviter_id` int(11) NOT NULL DEFAULT '0',
+  `union_member_id` bigint(20) NOT NULL DEFAULT '0',
+  `union_thread_id` bigint(20) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `member_findpwd`
+--
+
+CREATE TABLE IF NOT EXISTS `member_findpwd` (
+  `id` bigint(20) NOT NULL,
+  `member_id` int(11) NOT NULL DEFAULT '0',
+  `code` int(11) NOT NULL DEFAULT '0',
+  `dateline` int(11) NOT NULL DEFAULT '0',
+  `status` int(11) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `member_invite`
+--
+
+CREATE TABLE IF NOT EXISTS `member_invite` (
+  `id` int(11) NOT NULL,
+  `user_1_mid` int(11) NOT NULL DEFAULT '0' COMMENT '邀请人member_id',
+  `user_1_sid` int(11) NOT NULL DEFAULT '0' COMMENT '邀请人 ss_id',
+  `user_2_mid` int(11) NOT NULL DEFAULT '0' COMMENT '受邀人member_id',
+  `user_2_sid` int(11) NOT NULL DEFAULT '0' COMMENT '受邀人ss_id',
+  `type` int(11) NOT NULL DEFAULT '0' COMMENT '1:受邀注册 2:邀请人退款 ',
+  `status` int(11) NOT NULL DEFAULT '0' COMMENT '0:未赏罚 1:已赏 4:已撤赏',
+  `recharge_card` bigint(20) NOT NULL DEFAULT '0',
+  `judge_time` int(11) NOT NULL DEFAULT '0',
+  `judge_expire` bigint(20) NOT NULL DEFAULT '0',
+  `judge_transfer` bigint(20) NOT NULL DEFAULT '0',
+  `dateline` int(11) DEFAULT '0',
+  `is_read` int(11) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `member_session`
+--
+
+CREATE TABLE IF NOT EXISTS `member_session` (
+  `id` bigint(20) NOT NULL,
+  `uid` bigint(20) NOT NULL DEFAULT '0',
+  `token` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `online` int(11) NOT NULL DEFAULT '0'
+) ENGINE=MEMORY DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `recharge_card`
+--
+
+CREATE TABLE IF NOT EXISTS `recharge_card` (
+  `id` int(11) NOT NULL,
+  `code` bigint(20) NOT NULL DEFAULT '0',
+  `pwd` bigint(20) NOT NULL DEFAULT '0',
+  `worth` int(11) NOT NULL DEFAULT '0',
+  `status` int(11) NOT NULL DEFAULT '0' COMMENT '0:新生成 1:已上架 2:已充值',
+  `uid` int(11) NOT NULL DEFAULT '0',
+  `recharge_time` int(11) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `recharge_history`
+--
+
+CREATE TABLE IF NOT EXISTS `recharge_history` (
+  `id` int(11) NOT NULL,
+  `uid` int(11) NOT NULL DEFAULT '0' COMMENT 'ss_user_id',
+  `alipay_id` bigint(20) NOT NULL DEFAULT '0',
+  `card_id` int(11) NOT NULL DEFAULT '0' COMMENT '已废弃',
+  `dateline` int(11) NOT NULL DEFAULT '0',
+  `expire_dateline_old` int(11) NOT NULL DEFAULT '0',
+  `expire_dateline_new` int(11) NOT NULL DEFAULT '0',
+  `expire_time` bigint(20) NOT NULL DEFAULT '0',
+  `bytes` bigint(20) NOT NULL DEFAULT '0',
+  `be_invited_id` int(11) NOT NULL DEFAULT '0',
+  `inviter_id` int(11) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `server_data`
+--
+
+CREATE TABLE IF NOT EXISTS `server_data` (
+  `id` int(11) NOT NULL,
+  `friendlyname` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `ip_address` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `center_show` int(11) NOT NULL DEFAULT '1',
+  `is_vip` int(11) NOT NULL DEFAULT '0',
+  `is_unlimit` int(11) NOT NULL DEFAULT '0',
+  `sort_num` int(11) NOT NULL DEFAULT '0',
+  `remark` varchar(255) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `server_front`
+--
+
+CREATE TABLE IF NOT EXISTS `server_front` (
+  `id` int(11) NOT NULL,
+  `ip_address` varchar(15) COLLATE utf8_unicode_ci NOT NULL,
+  `is_vip` int(11) NOT NULL DEFAULT '0',
+  `is_unlimit` int(11) NOT NULL DEFAULT '0',
+  `is_hidden` int(11) NOT NULL DEFAULT '1',
+  `remark` varchar(255) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `traffic_history`
+--
+
+CREATE TABLE IF NOT EXISTS `traffic_history` (
+  `id` bigint(20) NOT NULL,
+  `uid` int(11) NOT NULL DEFAULT '0',
+  `byte_u` bigint(20) NOT NULL DEFAULT '0',
+  `byte_d` bigint(20) NOT NULL DEFAULT '0',
+  `dateline` int(11) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `union_deal_data`
+--
+
+CREATE TABLE IF NOT EXISTS `union_deal_data` (
+  `id` bigint(20) NOT NULL,
+  `member_id` bigint(20) NOT NULL DEFAULT '0',
+  `union_member_id` bigint(20) NOT NULL DEFAULT '0',
+  `union_thread_id` bigint(20) NOT NULL DEFAULT '0',
+  `dateline` int(11) NOT NULL DEFAULT '0',
+  `status` int(11) NOT NULL DEFAULT '0',
+  `pay_history_id` bigint(20) NOT NULL DEFAULT '0',
+  `payment_type` int(11) NOT NULL DEFAULT '0' COMMENT '1:alipay 2:wechat',
+  `top_up_amount` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `commission_rate` int(11) NOT NULL DEFAULT '0',
+  `commission_amount` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `recharge_id` bigint(20) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `union_member`
+--
+
+CREATE TABLE IF NOT EXISTS `union_member` (
+  `id` bigint(20) NOT NULL,
+  `member_id` bigint(20) NOT NULL DEFAULT '0',
+  `commission_rate` int(11) NOT NULL DEFAULT '0',
+  `jointime` int(11) NOT NULL DEFAULT '0',
+  `status` int(11) NOT NULL DEFAULT '0',
+  `balance` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `alipay_account` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `alipay_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `phone_mobile` varchar(255) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `union_thread`
+--
+
+CREATE TABLE IF NOT EXISTS `union_thread` (
+  `id` bigint(20) NOT NULL,
+  `union_member_id` bigint(20) NOT NULL DEFAULT '0',
+  `dateline` int(11) NOT NULL DEFAULT '0',
+  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `status_main` int(11) NOT NULL DEFAULT '0',
+  `status_remark` int(11) NOT NULL DEFAULT '0',
+  `remark_url` varchar(512) COLLATE utf8_unicode_ci NOT NULL,
+  `remark_other` text COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `union_withdraw`
+--
+
+CREATE TABLE IF NOT EXISTS `union_withdraw` (
+  `id` bigint(20) NOT NULL,
+  `union_member_id` bigint(20) NOT NULL DEFAULT '0',
+  `dateline` int(11) NOT NULL DEFAULT '0',
+  `amount` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `status` int(11) NOT NULL DEFAULT '0',
+  `alipay_trade_no` varchar(255) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `user`
+--
+
+CREATE TABLE IF NOT EXISTS `user` (
+  `id` int(11) NOT NULL,
+  `prepare` int(11) NOT NULL DEFAULT '0',
+  `email` varchar(32) NOT NULL,
+  `pass` varchar(32) NOT NULL,
+  `passwd` varchar(32) NOT NULL,
+  `t` int(11) NOT NULL DEFAULT '0',
+  `u` bigint(20) NOT NULL DEFAULT '0',
+  `d` bigint(20) NOT NULL DEFAULT '0',
+  `transfer_enable` bigint(20) NOT NULL DEFAULT '0',
+  `port` int(11) NOT NULL DEFAULT '0',
+  `switch` tinyint(4) NOT NULL DEFAULT '1',
+  `enable` tinyint(4) NOT NULL DEFAULT '1',
+  `enable_server` int(11) NOT NULL DEFAULT '1',
+  `type` tinyint(4) NOT NULL DEFAULT '1',
+  `last_get_gift_time` int(11) NOT NULL DEFAULT '0',
+  `last_rest_pass_time` int(11) NOT NULL DEFAULT '0',
+  `expire_dateline` int(11) NOT NULL DEFAULT '0',
+  `member_level` int(11) NOT NULL DEFAULT '0',
+  `benefit_201704_transfer_byte` bigint(20) NOT NULL DEFAULT '0',
+  `benefit_201704_transfer_byte_dateline` int(11) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `alipay_history`
+--
+ALTER TABLE `alipay_history`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `trade_no` (`trade_no`);
+
+--
+-- Indexes for table `member`
+--
+ALTER TABLE `member`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `member_findpwd`
+--
+ALTER TABLE `member_findpwd`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `status` (`status`),
+  ADD KEY `dateline` (`dateline`),
+  ADD KEY `member_id` (`member_id`),
+  ADD KEY `code` (`code`);
+
+--
+-- Indexes for table `member_invite`
+--
+ALTER TABLE `member_invite`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `user_1_mid_2` (`user_1_mid`,`user_2_mid`,`type`),
+  ADD KEY `user_1_mid` (`user_1_mid`),
+  ADD KEY `user_1_sid` (`user_1_sid`),
+  ADD KEY `user_2_mid` (`user_2_mid`),
+  ADD KEY `user_2_sid` (`user_2_sid`),
+  ADD KEY `rechard_card` (`recharge_card`),
+  ADD KEY `is_read` (`is_read`);
+
+--
+-- Indexes for table `member_session`
+--
+ALTER TABLE `member_session`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `token` (`token`);
+
+--
+-- Indexes for table `recharge_card`
+--
+ALTER TABLE `recharge_card`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `code` (`code`),
+  ADD KEY `pwd` (`pwd`),
+  ADD KEY `uid` (`uid`),
+  ADD KEY `status` (`status`),
+  ADD KEY `recharge_time` (`recharge_time`);
+
+--
+-- Indexes for table `recharge_history`
+--
+ALTER TABLE `recharge_history`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `server_data`
+--
+ALTER TABLE `server_data`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `is_unlimit` (`is_unlimit`),
+  ADD KEY `is_vip` (`is_vip`),
+  ADD KEY `sort_num` (`sort_num`),
+  ADD KEY `center_show` (`center_show`);
+
+--
+-- Indexes for table `server_front`
+--
+ALTER TABLE `server_front`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `traffic_history`
+--
+ALTER TABLE `traffic_history`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `uid` (`uid`),
+  ADD KEY `dateline` (`dateline`);
+
+--
+-- Indexes for table `union_deal_data`
+--
+ALTER TABLE `union_deal_data`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `pay_history_id` (`pay_history_id`,`payment_type`),
+  ADD UNIQUE KEY `recharge_id` (`recharge_id`);
+
+--
+-- Indexes for table `union_member`
+--
+ALTER TABLE `union_member`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `member_id` (`member_id`);
+
+--
+-- Indexes for table `union_thread`
+--
+ALTER TABLE `union_thread`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `union_withdraw`
+--
+ALTER TABLE `union_withdraw`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `user`
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`id`,`port`),
+  ADD UNIQUE KEY `port` (`port`),
+  ADD KEY `u` (`u`),
+  ADD KEY `d` (`d`),
+  ADD KEY `transfer_enable` (`transfer_enable`),
+  ADD KEY `expire_dateline` (`expire_dateline`),
+  ADD KEY `member_level` (`member_level`),
+  ADD KEY `prepare` (`prepare`),
+  ADD KEY `enable_server` (`enable_server`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `alipay_history`
+--
+ALTER TABLE `alipay_history`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `member`
+--
+ALTER TABLE `member`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `member_findpwd`
+--
+ALTER TABLE `member_findpwd`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `member_invite`
+--
+ALTER TABLE `member_invite`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `member_session`
+--
+ALTER TABLE `member_session`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `recharge_card`
+--
+ALTER TABLE `recharge_card`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `recharge_history`
+--
+ALTER TABLE `recharge_history`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `server_data`
+--
+ALTER TABLE `server_data`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `server_front`
+--
+ALTER TABLE `server_front`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `traffic_history`
+--
+ALTER TABLE `traffic_history`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `union_deal_data`
+--
+ALTER TABLE `union_deal_data`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `union_member`
+--
+ALTER TABLE `union_member`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `union_thread`
+--
+ALTER TABLE `union_thread`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `union_withdraw`
+--
+ALTER TABLE `union_withdraw`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `user`
+--
+ALTER TABLE `user`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+INSERT INTO `tetete`.`user` (`id`, `prepare`, `email`, `pass`, `passwd`, `t`, `u`, `d`, `transfer_enable`, `port`, `switch`, `enable`, `enable_server`, `type`, `last_get_gift_time`, `last_rest_pass_time`, `expire_dateline`, `member_level`, `benefit_201704_transfer_byte`, `benefit_201704_transfer_byte_dateline`) VALUES (NULL, '0', 'test@test.com', 'testest', '98991', '0', '0', '0', '0', '10000', '1', '0', '0', '1', '0', '0', '0', '0', '0', '0');
+
