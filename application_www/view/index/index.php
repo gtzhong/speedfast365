@@ -117,8 +117,7 @@
       <div class="container">
         <div class="row">
           <div class="signup-now-row text-center col-lg-12">
-            <div class="signup-now-title">开始使用Shadowsocks</div>
-            <a class="btn btn-default btn-primary btn-lg" href="/member/register">注册账号 »</a>
+            <a class="btn btn-default btn-primary btn-lg" href="https://github.com/ShenYinjie/speedfast365" target="_blank">Github</a>
           </div>
         </div>
       </div>
